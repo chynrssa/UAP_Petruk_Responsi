@@ -247,3 +247,98 @@ int main() {
             cout << "\033[1;31mInvalid seat number\033[0m" << endl;
             return 0;
         }
+
+        if (cinema.selectSeat(movieID, seatNumber)) {
+            bookingActions.push("User " + currentUser->username + " booked seat " + to_string(seatNumber) + " for movie " + cinema.getMovie(movieID)->getTitle());
+            Booking::confirmBooking(currentUser, cinema.getMovie(movieID), seatNumber);
+            cinema.displayTicket(currentUser, cinema.getMovie(movieID), seatNumber);
+        } else {
+            cout << "\033[1;31mSeat is already taken. Adding to the waiting list.\033[0m" << endl;
+            waitingList.push(currentUser);
+        }
+    } else if (choice == "2") {
+        string username, password;
+        cout << "Username: ";
+        cin >> username;
+        cout << "Password: ";
+        cin >> password;
+        cout << endl;
+
+        bool loggedIn = false;
+        User* currentUser = nullptr;
+        for (User* user : users) {
+            if (user->login(username, password)) {
+                loggedIn = true;
+                currentUser = user;
+                break;
+            }
+        }
+
+        if (!loggedIn) {
+            cout << "\033[1;31mInvalid credentials\033[0m" << endl;
+            return 0;
+        }
+
+        cinema.addMovie(new Movie("When I Fly Towards You", "10:00 AM", "Monday", 10));
+        cinema.addMovie(new Movie("Hidden Love", "12.30 PM", "Tuesday", 12));
+        cinema.addMovie(new Movie("Math Teacher, My Soulmate", "03.00 PM", "Wednesday", 20));
+        cinema.addMovie(new Movie("Lovely Runner", "05.30 PM", "Thursday", 13));
+        cinema.addMovie(new Movie("Death's Game", "08.00 PM", "Friday", 17));
+
+        size_t movieID;
+        int seatNumber;
+        cinema.displayMovies();
+        cout << "Select a movie by ID: ";
+        cin >> movieID;
+        movieID--;
+
+        if (movieID >= cinema.getNumberOfMovies()) {
+            cout << "\033[1;31mInvalid movie ID\033[0m" << endl;
+            return 0;
+        }
+
+        cout << "Select a seat number (0-49): ";
+        cin >> seatNumber;
+
+        if (seatNumber < 0 || seatNumber >= 50) {
+            cout << "\033[1;31mInvalid seat number\033[0m" << endl;
+            return 0;
+        }
+
+        if (cinema.selectSeat(movieID, seatNumber)) {
+            bookingActions.push("User " + currentUser->username + " booked seat " + to_string(seatNumber) + " for movie " + cinema.getMovie(movieID)->getTitle());
+            Booking::confirmBooking(currentUser, cinema.getMovie(movieID), seatNumber);
+            cinema.displayTicket(currentUser, cinema.getMovie(movieID), seatNumber);
+        } else {
+            cout << "\033[1;31mSeat is already taken. Adding to the waiting list.\033[0m" << endl;
+            waitingList.push(currentUser);
+        }
+    } else {
+        cout << "\033[1;31mInvalid option selected\033[0m" << endl;
+        return 0;
+    }
+
+    for (User* user : users) {
+        delete user;
+    }
+
+    cout << endl;
+    cout << "            Scan Barcode:            " << endl;
+    cout << " _                               _ " << endl;
+    cout << "|  ===============================  |" << endl;
+    cout << "   []||||||||[]|||||||[]||||||||[]   " << endl;
+    cout << "   []||||||||[]|||||||[]||||||||[]   " << endl;
+    cout << "   []||||||||[]|||||||[]||||||||[]   " << endl;
+    cout << "   []||||||||[]|||||||[]||||||||[]   " << endl;
+    cout << "   0 3 1 6 9 7 0 5 2 0 2 7 0 3 1 6   " << endl;
+    cout << "|_===============================_|" << endl;
+
+    
+    cout << "\033[1;33mRecent Booking Actions:\033[0m" << endl;
+    while (!bookingActions.empty()) {
+        cout << bookingActions.top() << endl;
+        bookingActions.pop();
+    }
+
+    return 0;
+}
