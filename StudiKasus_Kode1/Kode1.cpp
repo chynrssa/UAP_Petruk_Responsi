@@ -3,6 +3,12 @@
 #include <string>
 #include <iomanip>
 #include <vector>
+#include <stack>
+#include <queue>
+#include <fstream>
+#include <algorithm> 
+#include <ctime>     
+#include <map>       
 
 using namespace std;
 
@@ -116,3 +122,4 @@ public:
     size_t getNumberOfMovies() {
         return movies.size();
     }
+    
