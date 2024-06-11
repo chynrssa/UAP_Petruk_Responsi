@@ -122,4 +122,128 @@ public:
     size_t getNumberOfMovies() {
         return movies.size();
     }
-    
+
+    void displayTicket(User* user, Movie* movie, int seatNumber) {
+        char studio = 'A' + stoi(movie->getSchedule().substr(1, 1)) - 1;
+        cout << "\033[1;32m=============================================" << endl;
+        cout << "   Ticket - " << movie->getTitle() << endl;
+        cout << "=============================================" << endl;
+        cout << "Movie: " << movie->getTitle() << endl;
+        cout << "Time : " << movie->getSchedule() << endl;
+        cout << "Seat : " << seatNumber << endl;
+        cout << "Price: Rp " << movie->getPrice() * 10000 << endl;
+        cout << "Studio: " << studio << endl;
+        cout << "=============================================" << endl;
+        cout << "Enjoy your movie, " << user->username << "!" << endl;
+        cout << "\033[0m" << endl;
+        cout << endl;
+    }
+};
+
+class Booking {
+public:
+    static void confirmBooking(User* user, Movie* movie, int seatNumber) {
+        cout << "\033[44mBooking confirmed for " << user->username << "!\033[0m" << endl;
+        cout << "\033[44mMovie : " << movie->getTitle() << "\033[0m" << endl;
+        cout << "\033[44mDay   : " << movie->getDay() << "\033[0m" << endl;
+        cout << "\033[44mSeat  : " << seatNumber << "\033[0m" << endl;
+        cout << "\033[44mPrice : Rp  " << movie->getPrice() * 10000 << "\033[0m" << endl;
+        cout << "\033[44mEnjoy your movie!\033[0m" << endl;
+        cout << endl; 
+    }
+};
+
+void displayHeader() {
+    cout << "\033[1;35m==================================\033[0m" << endl;
+    cout << "\033[1;36mWelcome to CAD Starlight Cinemas!\033[0m" << endl;
+    cout << "\033[1;35m==================================\033[0m" << endl;
+}
+
+void displayMenu() {
+    cout << "\033[1;33m1. Register\033[0m" << endl;
+    cout << "\033[1;33m2. Login\033[0m" << endl;
+    cout << "Choose an option: ";
+}
+
+int main() {
+    list<User*> users; 
+    Cinema cinema;
+
+    stack<string> bookingActions;
+    queue<User*> waitingList;
+
+    displayHeader();
+    cout << endl;
+    displayMenu();
+
+    string choice;
+    cin >> choice;
+
+    if (choice == "1") {
+        string username, password;
+        cout << "Enter username: ";
+        cin >> username;
+
+        if (username.length() > 20) {
+            cout << "\033[1;31mInvalid username length. Maximum length is 20 characters.\033[0m" << endl;
+            return 0;
+        }
+
+        cout << "Enter password: ";
+        cin >> password;
+        users.push_back(new User(username, password));
+        cout << "\033[1;32mRegistration successful!\033[0m" << endl;
+        cout << endl;
+
+        
+        cout << "=========================" << endl;
+        cout << "\033[38;5;208mPlease login to continue.\033[0m" << endl;
+
+
+        cout << "Username: ";
+        cin >> username;
+        cout << "Password: ";
+        cin >> password;
+        cout << endl;
+
+        bool loggedIn = false;
+        User* currentUser = nullptr;
+        for (User* user : users) {
+            if (user->login(username, password)) {
+                loggedIn = true;
+                currentUser = user;
+                break;
+            }
+        }
+
+        if (!loggedIn) {
+            cout << "\033[1;31mInvalid credentials\033[0m" << endl;
+            return 0;
+        }
+
+       
+        cinema.addMovie(new Movie("When I Fly Towards You", "10:00 AM", "Monday", 10));
+        cinema.addMovie(new Movie("Hidden Love", "12.30 PM", "Tuesday", 12));
+        cinema.addMovie(new Movie("Math Teacher, My Soulmate", "03.00 PM", "Wednesday", 20));
+        cinema.addMovie(new Movie("Lovely Runner", "05.30 PM", "Thursday", 13));
+        cinema.addMovie(new Movie("Death's Game", "08.00 PM", "Friday", 17));
+
+        size_t movieID;
+        int seatNumber;
+        cinema.displayMovies();
+        cout << "Select a movie by ID: ";
+        cin >> movieID;
+        movieID--;
+
+        if (movieID >= cinema.getNumberOfMovies()) {
+            cout << "\033[1;31mInvalid movie ID\033[0m" << endl;
+            return 0;
+        }
+
+        cout << "Select a seat number (0-49): ";
+        cin >> seatNumber;
+
+        if (seatNumber < 0 || seatNumber >= 50) {
+            cout << "\033[1;31mInvalid seat number\033[0m" << endl;
+            return 0;
+        }
