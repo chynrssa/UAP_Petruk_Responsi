@@ -324,16 +324,17 @@ int main() {
 
     cout << endl;
     cout << "            Scan Barcode:            " << endl;
-    cout << " _                               _ " << endl;
+    cout << " __                               __ " << endl;
     cout << "|  ===============================  |" << endl;
     cout << "   []||||||||[]|||||||[]||||||||[]   " << endl;
     cout << "   []||||||||[]|||||||[]||||||||[]   " << endl;
     cout << "   []||||||||[]|||||||[]||||||||[]   " << endl;
     cout << "   []||||||||[]|||||||[]||||||||[]   " << endl;
     cout << "   0 3 1 6 9 7 0 5 2 0 2 7 0 3 1 6   " << endl;
-    cout << "|_===============================_|" << endl;
+    cout << "|__===============================__|" << endl;
 
     
+    cout << endl;
     cout << "\033[1;33mRecent Booking Actions:\033[0m" << endl;
     while (!bookingActions.empty()) {
         cout << bookingActions.top() << endl;
